@@ -25,11 +25,14 @@ export interface LeadStats {
   ultimos_7_dias: number;
 }
 
+export type SummaryFilter = Pick<ListLeadsFilter, 'fuente' | 'date_from' | 'date_to'>;
+
 export interface ILeadRepository {
   save(lead: Lead): Promise<Lead>;
   findById(id: string): Promise<Lead | null>;
   findByEmail(email: string, includeDeleted?: boolean): Promise<Lead | null>;
   findAll(filter: ListLeadsFilter): Promise<PaginatedResult<Lead>>;
+  findAllByFilter(filter: SummaryFilter): Promise<Lead[]>;
   update(lead: Lead): Promise<Lead>;
   softDelete(id: string): Promise<void>;
   getStats(): Promise<LeadStats>;

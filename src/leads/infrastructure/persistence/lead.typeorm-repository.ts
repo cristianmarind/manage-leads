@@ -8,6 +8,7 @@ import {
   LeadStats,
   ListLeadsFilter,
   PaginatedResult,
+  SummaryFilter,
 } from '../../domain/lead.repository.port';
 import { Fuente } from '../../domain/fuente.enum';
 
@@ -70,6 +71,25 @@ export class LeadTypeormRepository implements ILeadRepository {
 
   async softDelete(id: string): Promise<void> {
     await this.repo.softDelete(id);
+  }
+
+  async findAllByFilter(filter: SummaryFilter): Promise<Lead[]> {
+    const qb = this.repo.createQueryBuilder('lead');
+
+    if (filter.fuente) {
+      qb.andWhere('lead.fuente = :fuente', { fuente: filter.fuente });
+    }
+    if (filter.date_from) {
+      qb.andWhere('lead.created_at >= :date_from', { date_from: filter.date_from });
+    }
+    if (filter.date_to) {
+      qb.andWhere('lead.created_at <= :date_to', { date_to: filter.date_to });
+    }
+
+    qb.orderBy('lead.created_at', 'DESC');
+
+    const items = await qb.getMany();
+    return items.map((item) => this.toDomain(item));
   }
 
   async getStats(): Promise<LeadStats> {

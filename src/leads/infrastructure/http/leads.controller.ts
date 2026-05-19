@@ -20,6 +20,8 @@ import { GetLeadUseCase } from '../../application/use-cases/get-lead.use-case';
 import { UpdateLeadUseCase } from '../../application/use-cases/update-lead.use-case';
 import { DeleteLeadUseCase } from '../../application/use-cases/delete-lead.use-case';
 import { GetLeadStatsUseCase } from '../../application/use-cases/get-lead-stats.use-case';
+import { GetLeadAiSummaryUseCase } from '../../application/use-cases/get-lead-ai-summary.use-case';
+import { AiSummaryDto } from '../../application/dtos/ai-summary.dto';
 
 @Controller('leads')
 export class LeadsController {
@@ -30,6 +32,7 @@ export class LeadsController {
     private readonly updateLeadUseCase: UpdateLeadUseCase,
     private readonly deleteLeadUseCase: DeleteLeadUseCase,
     private readonly getLeadStatsUseCase: GetLeadStatsUseCase,
+    private readonly getLeadAiSummaryUseCase: GetLeadAiSummaryUseCase,
   ) {}
 
   @Post()
@@ -46,6 +49,11 @@ export class LeadsController {
   @Get('stats')
   getStats() {
     return this.getLeadStatsUseCase.execute();
+  }
+
+  @Post('ai/summary')
+  aiSummary(@Body() dto: AiSummaryDto) {
+    return this.getLeadAiSummaryUseCase.execute(dto);
   }
 
   @Get(':id')

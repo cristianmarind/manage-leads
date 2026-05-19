@@ -9,7 +9,10 @@ import { GetLeadUseCase } from './application/use-cases/get-lead.use-case';
 import { UpdateLeadUseCase } from './application/use-cases/update-lead.use-case';
 import { DeleteLeadUseCase } from './application/use-cases/delete-lead.use-case';
 import { GetLeadStatsUseCase } from './application/use-cases/get-lead-stats.use-case';
+import { GetLeadAiSummaryUseCase } from './application/use-cases/get-lead-ai-summary.use-case';
+import { OpenAiSummaryAdapter } from './infrastructure/ai/openai-summary.adapter';
 import { LEAD_REPOSITORY } from './domain/lead.repository.port';
+import { AI_SUMMARY_PORT } from './domain/ai-summary.port';
 
 @Module({
   imports: [TypeOrmModule.forFeature([LeadOrmEntity])],
@@ -22,6 +25,8 @@ import { LEAD_REPOSITORY } from './domain/lead.repository.port';
     UpdateLeadUseCase,
     DeleteLeadUseCase,
     GetLeadStatsUseCase,
+    GetLeadAiSummaryUseCase,
+    { provide: AI_SUMMARY_PORT, useClass: OpenAiSummaryAdapter },
   ],
 })
 export class LeadsModule {}
