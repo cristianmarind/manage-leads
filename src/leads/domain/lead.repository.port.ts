@@ -34,6 +34,6 @@ export interface ILeadRepository {
   findAll(filter: ListLeadsFilter): Promise<PaginatedResult<Lead>>;
   findAllByFilter(filter: SummaryFilter): Promise<Lead[]>;
   update(lead: Lead): Promise<Lead>;
-  softDelete(id: string): Promise<void>;
+  softDelete(id: string, deleterId?: string | null): Promise<void>;
   getStats(): Promise<LeadStats>;
 }

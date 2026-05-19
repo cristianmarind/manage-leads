@@ -69,7 +69,10 @@ export class LeadTypeormRepository implements ILeadRepository {
     return this.toDomain(saved);
   }
 
-  async softDelete(id: string): Promise<void> {
+  async softDelete(id: string, deleterId?: string | null): Promise<void> {
+    if (deleterId !== undefined) {
+      await this.repo.update(id, { deleter_id: deleterId ?? null });
+    }
     await this.repo.softDelete(id);
   }
 
@@ -136,6 +139,9 @@ export class LeadTypeormRepository implements ILeadRepository {
       fuente: orm.fuente,
       producto_interes: orm.producto_interes,
       presupuesto: orm.presupuesto !== null ? Number(orm.presupuesto) : null,
+      creator_id: orm.creator_id,
+      updater_id: orm.updater_id,
+      deleter_id: orm.deleter_id,
       created_at: orm.created_at,
       updated_at: orm.updated_at,
       deleted_at: orm.deleted_at,
@@ -151,6 +157,9 @@ export class LeadTypeormRepository implements ILeadRepository {
     orm.fuente = lead.fuente;
     orm.producto_interes = lead.producto_interes;
     orm.presupuesto = lead.presupuesto;
+    orm.creator_id = lead.creator_id;
+    orm.updater_id = lead.updater_id;
+    orm.deleter_id = lead.deleter_id;
     orm.created_at = lead.created_at;
     orm.updated_at = lead.updated_at;
     orm.deleted_at = lead.deleted_at;

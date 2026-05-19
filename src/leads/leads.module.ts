@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LeadOrmEntity } from './infrastructure/persistence/lead.orm-entity';
 import { LeadTypeormRepository } from './infrastructure/persistence/lead.typeorm-repository';
+import { ConsoleLeadLogger } from './infrastructure/logger/console-lead-logger';
 import { LeadsController } from './infrastructure/http/leads.controller';
+import { TypeformWebhookController } from './infrastructure/http/typeform-webhook.controller';
+import { TypeformWebhookMapper } from './infrastructure/http/typeform-webhook.mapper';
 import { CreateLeadUseCase } from './application/use-cases/create-lead.use-case';
 import { ListLeadsUseCase } from './application/use-cases/list-leads.use-case';
 import { GetLeadUseCase } from './application/use-cases/get-lead.use-case';
@@ -12,13 +15,16 @@ import { GetLeadStatsUseCase } from './application/use-cases/get-lead-stats.use-
 import { GetLeadAiSummaryUseCase } from './application/use-cases/get-lead-ai-summary.use-case';
 import { OpenAiSummaryAdapter } from './infrastructure/ai/openai-summary.adapter';
 import { LEAD_REPOSITORY } from './domain/lead.repository.port';
+import { LEAD_LOGGER } from './domain/lead-logger.port';
 import { AI_SUMMARY_PORT } from './domain/ai-summary.port';
 
 @Module({
   imports: [TypeOrmModule.forFeature([LeadOrmEntity])],
-  controllers: [LeadsController],
+  controllers: [LeadsController, TypeformWebhookController],
   providers: [
     { provide: LEAD_REPOSITORY, useClass: LeadTypeormRepository },
+    { provide: LEAD_LOGGER, useClass: ConsoleLeadLogger },
+    { provide: AI_SUMMARY_PORT, useClass: OpenAiSummaryAdapter },
     CreateLeadUseCase,
     ListLeadsUseCase,
     GetLeadUseCase,
@@ -26,7 +32,7 @@ import { AI_SUMMARY_PORT } from './domain/ai-summary.port';
     DeleteLeadUseCase,
     GetLeadStatsUseCase,
     GetLeadAiSummaryUseCase,
-    { provide: AI_SUMMARY_PORT, useClass: OpenAiSummaryAdapter },
+    TypeformWebhookMapper,
   ],
 })
 export class LeadsModule {}

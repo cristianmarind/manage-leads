@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -22,6 +23,9 @@ import {
   ApiConflictResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../../../auth/decorators/current-user.decorator';
+import type { JwtPayload } from '../../../auth/interfaces/jwt-payload.interface';
 import { CreateLeadDto } from '../../application/dtos/create-lead.dto';
 import { UpdateLeadDto } from '../../application/dtos/update-lead.dto';
 import { ListLeadsQueryDto } from '../../application/dtos/list-leads.query.dto';
@@ -42,6 +46,7 @@ import { GetLeadAiSummaryUseCase } from '../../application/use-cases/get-lead-ai
 
 @ApiTags('leads')
 @ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('leads')
 export class LeadsController {
   constructor(
@@ -60,38 +65,38 @@ export class LeadsController {
   @ApiCreatedResponse({ type: LeadResponseDto, description: 'Lead creado exitosamente' })
   @ApiBadRequestResponse({ description: 'Datos de entrada inválidos' })
   @ApiConflictResponse({ description: 'Ya existe un lead con ese email' })
-  create(@Body() dto: CreateLeadDto) {
-    return this.createLeadUseCase.execute(dto);
+  create(@Body() dto: CreateLeadDto, @CurrentUser() user: JwtPayload) {
+    return this.createLeadUseCase.execute(dto, user.sub);
   }
 
   @Get()
   @ApiOperation({ summary: 'Listar leads con paginación y filtros' })
   @ApiOkResponse({ type: PaginatedLeadsResponseDto })
-  findAll(@Query() query: ListLeadsQueryDto) {
-    return this.listLeadsUseCase.execute(query);
+  findAll(@Query() query: ListLeadsQueryDto, @CurrentUser() user: JwtPayload) {
+    return this.listLeadsUseCase.execute(query, user.sub);
   }
 
   @Get('stats')
   @ApiOperation({ summary: 'Obtener estadísticas de leads' })
   @ApiOkResponse({ type: LeadStatsResponseDto })
-  getStats() {
-    return this.getLeadStatsUseCase.execute();
+  getStats(@CurrentUser() user: JwtPayload) {
+    return this.getLeadStatsUseCase.execute(user.sub);
   }
 
   @Post('ai/summary')
   @ApiOperation({ summary: 'Generar resumen ejecutivo con IA' })
   @ApiOkResponse({ type: AiSummaryResponseDto })
   @ApiBadRequestResponse({ description: 'Filtros inválidos' })
-  aiSummary(@Body() dto: AiSummaryDto) {
-    return this.getLeadAiSummaryUseCase.execute(dto);
+  aiSummary(@Body() dto: AiSummaryDto, @CurrentUser() user: JwtPayload) {
+    return this.getLeadAiSummaryUseCase.execute(dto, user.sub);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un lead por ID' })
   @ApiOkResponse({ type: LeadResponseDto })
   @ApiNotFoundResponse({ description: 'Lead no encontrado' })
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.getLeadUseCase.execute(id);
+  findOne(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: JwtPayload) {
+    return this.getLeadUseCase.execute(id, user.sub);
   }
 
   @Patch(':id')
@@ -102,8 +107,9 @@ export class LeadsController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateLeadDto,
+    @CurrentUser() user: JwtPayload,
   ) {
-    return this.updateLeadUseCase.execute(id, dto);
+    return this.updateLeadUseCase.execute(id, dto, user.sub);
   }
 
   @Delete(':id')
@@ -111,7 +117,7 @@ export class LeadsController {
   @ApiOperation({ summary: 'Eliminar un lead (soft delete)' })
   @ApiNoContentResponse({ description: 'Lead eliminado exitosamente' })
   @ApiNotFoundResponse({ description: 'Lead no encontrado' })
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.deleteLeadUseCase.execute(id);
+  remove(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: JwtPayload) {
+    return this.deleteLeadUseCase.execute(id, user.sub);
   }
 }

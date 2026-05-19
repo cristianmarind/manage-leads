@@ -31,6 +31,15 @@ export class LeadOrmEntity {
   @Column({ type: 'numeric', precision: 10, scale: 2, nullable: true })
   presupuesto!: number | null;
 
+  @Column({ nullable: true, type: 'uuid' })
+  creator_id!: string | null;
+
+  @Column({ nullable: true, type: 'uuid' })
+  updater_id!: string | null;
+
+  @Column({ nullable: true, type: 'uuid' })
+  deleter_id!: string | null;
+
   @CreateDateColumn()
   created_at!: Date;
 
