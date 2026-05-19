@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
-import { Lead } from '../leads/lead.entity';
+import { LeadOrmEntity } from '../leads/infrastructure/persistence/lead.orm-entity';
 
 dotenv.config();
 
@@ -11,6 +11,6 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_NAME || 'onemillion',
-  entities: [Lead],
+  entities: [LeadOrmEntity],
   migrations: ['src/database/migrations/*.ts'],
 });

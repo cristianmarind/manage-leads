@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Lead } from './leads/lead.entity';
+import { LeadsModule } from './leads/leads.module';
 
 @Module({
   imports: [
@@ -17,12 +17,13 @@ import { Lead } from './leads/lead.entity';
         username: config.get('DB_USERNAME', 'postgres'),
         password: config.get('DB_PASSWORD', 'postgres'),
         database: config.get('DB_NAME', 'onemillion'),
-        entities: [Lead],
+        autoLoadEntities: true,
         migrations: ['dist/database/migrations/*.js'],
         synchronize: false,
       }),
       inject: [ConfigService],
     }),
+    LeadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

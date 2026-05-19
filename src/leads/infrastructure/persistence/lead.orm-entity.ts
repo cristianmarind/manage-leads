@@ -1,21 +1,15 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
-export enum Fuente {
-  INSTAGRAM = 'instagram',
-  FACEBOOK = 'facebook',
-  LANDING_PAGE = 'landing_page',
-  REFERIDO = 'referido',
-  OTRO = 'otro',
-}
+import { Fuente } from '../../domain/fuente.enum';
 
 @Entity('lead')
-export class Lead {
+export class LeadOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -42,4 +36,7 @@ export class Lead {
 
   @UpdateDateColumn()
   updated_at!: Date;
+
+  @DeleteDateColumn()
+  deleted_at!: Date | null;
 }
