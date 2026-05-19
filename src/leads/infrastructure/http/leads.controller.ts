@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiTags,
+  ApiBearerAuth,
   ApiOperation,
   ApiCreatedResponse,
   ApiOkResponse,
@@ -40,6 +41,7 @@ import { GetLeadStatsUseCase } from '../../application/use-cases/get-lead-stats.
 import { GetLeadAiSummaryUseCase } from '../../application/use-cases/get-lead-ai-summary.use-case';
 
 @ApiTags('leads')
+@ApiBearerAuth('access-token')
 @Controller('leads')
 export class LeadsController {
   constructor(

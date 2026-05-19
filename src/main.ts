@@ -18,6 +18,10 @@ async function bootstrap() {
     .setTitle('OneMillion API')
     .setDescription('API para gestión de leads')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
     .build();
   SwaggerModule.setup('api/docs', app, SwaggerModule.createDocument(app, config));
 
