@@ -84,6 +84,7 @@ export class LeadsController {
   }
 
   @Post('ai/summary')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Generar resumen ejecutivo con IA' })
   @ApiOkResponse({ type: AiSummaryResponseDto })
   @ApiBadRequestResponse({ description: 'Filtros inválidos' })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLeadDto } from '../../application/dtos/create-lead.dto';
-import { Fuente } from '../../domain/fuente.enum';
+import { CreateLeadDto } from '../../../application/dtos/create-lead.dto';
+import { Fuente } from '../../../domain/fuente.enum';
 import { TypeformAnswer, TypeformWebhookDto } from './typeform-webhook.dto';
 
 @Injectable()

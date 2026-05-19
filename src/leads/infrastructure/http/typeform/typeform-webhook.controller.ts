@@ -8,8 +8,8 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { validate } from 'class-validator';
-import { CreateLeadUseCase } from '../../application/use-cases/create-lead.use-case';
-import { LeadResponseDto } from '../../application/dtos/lead-response.dto';
+import { CreateLeadUseCase } from '../../../application/use-cases/create-lead.use-case';
+import { LeadResponseDto } from '../../../application/dtos/lead-response.dto';
 import { TypeformWebhookDto } from './typeform-webhook.dto';
 import { TypeformWebhookMapper } from './typeform-webhook.mapper';
 

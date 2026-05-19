@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
         username: config.get('DB_USERNAME', 'postgres'),
         password: config.get('DB_PASSWORD', 'postgres'),
         database: config.get('DB_NAME', 'onemillion'),
+        ssl: config.get('DB_HOST', 'localhost') !== 'localhost' ? { rejectUnauthorized: false } : false,
         autoLoadEntities: true,
         migrations: ['dist/database/migrations/*.js'],
         synchronize: false,
