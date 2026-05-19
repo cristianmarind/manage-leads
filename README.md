@@ -1,6 +1,6 @@
 # OneMillion API
 
-API REST para gestión de leads comerciales, construida con **NestJS v11**, **TypeORM** y **PostgreSQL**. Diseñada desde cero con arquitectura hexagonal, autenticación JWT robusta y cobertura de tests completa.
+API REST para gestión de leads comerciales, construida con **NestJS v11**, **TypeORM** y **PostgreSQL**. Diseñada desde cero con arquitectura hexagonal, autenticación JWT robusta y cobertura de tests completa, se puede probar en un ambiente de pruebas desplegado en Render desde https://manage-leads-zw0e.onrender.com/ tener en cuenta que el aplicativo puede estar apagado al momento de la prueba, entonces hacer alguna peticion y cuando se active probar desde https://manage-leads-zw0e.onrender.com/api/docs/
 
 ---
 
